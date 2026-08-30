@@ -2,9 +2,9 @@
 
 A day planner for a Mirpur print shop that schedules jobs around rotating power cuts — auto-placing jobs on a timeline, routing power-hungry jobs to the generator only when unavoidable, and letting the shop owner drag jobs to reschedule with the generator cost updating live.
 
-- **Team ID:** `[FILL IN — e.g. T035]`
-- **Problem ID:** `[FILL IN — e.g. P01]`
-- **Live URL:** `[FILL IN — not yet deployed; see "Status" below]`
+- **Team ID:** `LSH26-T035`
+- **Problem ID:** `P01`
+- **Live URL:** ``
 
 ## Status
 
