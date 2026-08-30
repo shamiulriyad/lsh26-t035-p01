@@ -31,8 +31,38 @@ const els = {
   cutsRow: document.getElementById("cutsRow"),
   planRow: document.getElementById("planRow"),
   unplacedList: document.getElementById("unplacedList"),
-  toast: document.getElementById("toast")
+  toast: document.getElementById("toast"),
+  toastBackdrop: document.getElementById("toastBackdrop"),
+  loadingBar: document.getElementById("loadingBar")
 };
+
+let displayedMinutes = 0;
+let displayedCost = null;
+let pendingRequests = 0;
+
+function setLoading(active) {
+  pendingRequests += active ? 1 : -1;
+  els.loadingBar.classList.toggle("active", pendingRequests > 0);
+}
+
+function animateValue(from, to, duration, onUpdate) {
+  if (Math.abs(from - to) < 0.005) { onUpdate(to); return; }
+  const start = performance.now();
+  function tick(now) {
+    const t = Math.min(1, (now - start) / duration);
+    const eased = 1 - Math.pow(1 - t, 3);
+    onUpdate(from + (to - from) * eased);
+    if (t < 1) requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+
+function pulseStat(el) {
+  const card = el.closest(".stat") || el;
+  card.classList.remove("pulse");
+  void card.offsetWidth; // restart the animation even if it's still mid-pulse
+  card.classList.add("pulse");
+}
 
 function toMinutes(hhmm) {
   const [h, m] = hhmm.split(":").map(Number);
@@ -45,13 +75,43 @@ function toHHMM(totalMin) {
   return String(h).padStart(2, "0") + ":" + String(m).padStart(2, "0");
 }
 
-let toastTimer = null;
+// Minutes from shop open to a clock time. On a day that itself wraps past
+// midnight (overnight, or full-24h when close === open), a time "before"
+// open is treated as landing on the next calendar day; on an ordinary
+// same-day shop it's left negative so callers can clamp it away instead of
+// wrapping an out-of-range time all the way around the clock.
+function minutesFromOpen(hhmm, openMin, dayWraps) {
+  let offset = toMinutes(hhmm) - openMin;
+  if (offset < 0 && dayWraps) offset += 24 * 60;
+  return offset;
+}
+
+let toastHideTimer = null;
+let toastRemoveTimer = null;
 function showToast(message) {
+  clearTimeout(toastHideTimer);
+  clearTimeout(toastRemoveTimer);
   els.toast.textContent = message;
   els.toast.hidden = false;
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => { els.toast.hidden = true; }, 3500);
+  els.toastBackdrop.hidden = false;
+  void els.toast.offsetWidth; // force reflow so re-showing while already visible still transitions
+  els.toast.classList.add("show");
+  els.toastBackdrop.classList.add("show");
+  toastHideTimer = setTimeout(hideToast, 3500);
 }
+
+function hideToast() {
+  clearTimeout(toastHideTimer);
+  clearTimeout(toastRemoveTimer);
+  els.toast.classList.remove("show");
+  els.toastBackdrop.classList.remove("show");
+  toastRemoveTimer = setTimeout(() => {
+    els.toast.hidden = true;
+    els.toastBackdrop.hidden = true;
+  }, 300);
+}
+
+els.toastBackdrop.addEventListener("click", hideToast);
 
 els.addCut.addEventListener("click", () => {
   if (!els.cutStart.value || !els.cutEnd.value) return;
@@ -66,8 +126,8 @@ els.addJob.addEventListener("click", () => {
   const name = els.jobName.value.trim();
   const minutes = Number(els.jobMinutes.value);
   const power = els.jobPower.value;
-  if (!name || !minutes || minutes % 15 !== 0) {
-    alert("Give the job a name and a duration that's a multiple of 15 minutes.");
+  if (!name || !minutes || minutes <= 0) {
+    alert("Give the job a name and a duration in minutes.");
     return;
   }
   if (state.jobs.some(j => j.name === name)) {
@@ -83,6 +143,11 @@ els.addJob.addEventListener("click", () => {
 
 els.ratePerHour.addEventListener("input", renderGeneratorCost);
 
+function removeChipThen(li, action) {
+  li.classList.add("removing");
+  li.addEventListener("animationend", action, { once: true });
+}
+
 function renderCutChips() {
   els.cutList.innerHTML = "";
   state.cuts.forEach((cut, idx) => {
@@ -91,9 +156,11 @@ function renderCutChips() {
     const remove = document.createElement("button");
     remove.textContent = "×";
     remove.addEventListener("click", () => {
-      state.cuts.splice(idx, 1);
-      renderCutChips();
-      refreshSchedule();
+      removeChipThen(li, () => {
+        state.cuts.splice(idx, 1);
+        renderCutChips();
+        refreshSchedule();
+      });
     });
     li.appendChild(remove);
     els.cutList.appendChild(li);
@@ -104,13 +171,20 @@ function renderJobChips() {
   els.jobList.innerHTML = "";
   state.jobs.forEach((job, idx) => {
     const li = document.createElement("li");
-    li.textContent = `${job.name} (${job.minutes}m, ${job.power})`;
+    const dot = document.createElement("span");
+    dot.className = "chip-dot " + job.power;
+    li.appendChild(dot);
+    const label = document.createElement("span");
+    label.textContent = `${job.name} · ${job.minutes}m`;
+    li.appendChild(label);
     const remove = document.createElement("button");
     remove.textContent = "×";
     remove.addEventListener("click", () => {
-      state.jobs.splice(idx, 1);
-      renderJobChips();
-      refreshSchedule();
+      removeChipThen(li, () => {
+        state.jobs.splice(idx, 1);
+        renderJobChips();
+        refreshSchedule();
+      });
     });
     li.appendChild(remove);
     els.jobList.appendChild(li);
@@ -129,25 +203,36 @@ function currentDayCase() {
 
 async function refreshSchedule() {
   const dayCase = currentDayCase();
+  setLoading(true);
+  let response;
+  try {
+    try {
+      response = await fetch("/api/schedule", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(dayCase)
+      });
+    } catch (networkError) {
+      console.error("Could not reach the server", networkError);
+      showToast("Can't reach the server — is it still running? The plan below may be out of date.");
+      return;
+    }
 
-  const response = await fetch("/api/schedule", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(dayCase)
-  });
+    if (!response.ok) {
+      console.error("Schedule request failed", await response.text());
+      showToast("Could not build a plan for the current jobs and cuts.");
+      return;
+    }
 
-  if (!response.ok) {
-    console.error("Schedule request failed", await response.text());
-    showToast("Could not build a plan for the current jobs and cuts.");
-    return;
+    lastDayCase = dayCase;
+    lastResult = await response.json();
+    render();
+  } finally {
+    setLoading(false);
   }
-
-  lastDayCase = dayCase;
-  lastResult = await response.json();
-  render();
 }
 
-async function moveJob(jobName, newStartHHMM) {
+async function moveJob(jobName, newStartHHMM, draggedBar) {
   const body = {
     day_case: lastDayCase,
     placements: lastResult.placements,
@@ -156,28 +241,57 @@ async function moveJob(jobName, newStartHHMM) {
     new_start: newStartHHMM
   };
 
-  const response = await fetch("/api/schedule/move", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body)
-  });
+  setLoading(true);
+  let response;
+  try {
+    try {
+      response = await fetch("/api/schedule/move", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+      });
+    } catch (networkError) {
+      console.error("Could not reach the server", networkError);
+      showToast("Can't reach the server — is it still running?");
+      rejectDrag(draggedBar);
+      return;
+    }
 
-  if (!response.ok) {
-    const error = await response.json().catch(() => ({ reason: "That move isn't allowed." }));
-    showToast(error.reason || "That move isn't allowed.");
-    render(); // snap back to the last known-good plan
-    return;
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({ reason: "That move isn't allowed." }));
+      showToast(error.reason || "That move isn't allowed.");
+      rejectDrag(draggedBar);
+      return;
+    }
+
+    lastResult = await response.json();
+    render();
+    flashSuccess(jobName);
+  } finally {
+    setLoading(false);
   }
+}
 
-  lastResult = await response.json();
-  render();
+function rejectDrag(bar) {
+  if (!bar) { render(); return; }
+  bar.classList.add("shake-reject");
+  setTimeout(render, 300); // let the shake read before the bar snaps back to its real slot
+}
+
+function flashSuccess(jobName) {
+  const bar = els.planRow.querySelector(`.bar[data-job-name="${CSS.escape(jobName)}"]`);
+  if (!bar) return;
+  bar.classList.add("just-moved");
+  bar.addEventListener("animationend", () => bar.classList.remove("just-moved"), { once: true });
 }
 
 function render() {
   if (!lastDayCase) return;
   const openMin = toMinutes(lastDayCase.shop_open);
   const closeMin = toMinutes(lastDayCase.shop_close);
-  const totalMin = Math.max(0, closeMin - openMin);
+  const dayWraps = closeMin <= openMin;
+  let totalMin = closeMin - openMin;
+  if (dayWraps) totalMin += 24 * 60;
   const widthPx = totalMin * PX_PER_MIN;
 
   [els.timeAxis, els.cutsRow, els.planRow].forEach(el => {
@@ -194,22 +308,25 @@ function render() {
     els.timeAxis.appendChild(tick);
   }
 
-  lastDayCase.cuts.forEach(cut => {
-    const start = toMinutes(cut.start) - openMin;
-    const end = toMinutes(cut.end) - openMin;
+  lastDayCase.cuts.forEach((cut, idx) => {
+    const start = minutesFromOpen(cut.start, openMin, dayWraps);
+    let end = minutesFromOpen(cut.end, openMin, dayWraps);
+    if (dayWraps && end <= start) end += 24 * 60;
     const bar = document.createElement("div");
     bar.className = "bar cut";
     bar.style.left = (start * PX_PER_MIN) + "px";
     bar.style.width = ((end - start) * PX_PER_MIN) + "px";
+    bar.style.animationDelay = (idx * 35) + "ms, 0ms";
     bar.title = `Power cut ${cut.start}–${cut.end}`;
     els.cutsRow.appendChild(bar);
   });
 
-  lastResult.placements.forEach(p => {
+  lastResult.placements.forEach((p, idx) => {
     const bar = document.createElement("div");
     const power = p.job.power.toLowerCase();
     bar.className = "bar " + power + (p.generatorMinutes > 0 ? " cost" : "");
-    positionBar(bar, toMinutes(p.start) - openMin, p.job.minutes);
+    positionBar(bar, minutesFromOpen(p.start, openMin, dayWraps), p.job.minutes);
+    bar.style.animationDelay = (idx * 35) + "ms";
     bar.textContent = p.job.name;
     bar.title = `${p.job.name}: ${p.start}–${p.end}` +
       (p.generatorMinutes > 0 ? ` (${p.generatorMinutes} generator min)` : "") +
@@ -220,7 +337,14 @@ function render() {
     els.planRow.appendChild(bar);
   });
 
-  els.generatorMinutes.textContent = lastResult.totalGeneratorMinutes;
+  const newMinutes = lastResult.totalGeneratorMinutes;
+  if (newMinutes !== displayedMinutes) {
+    animateValue(displayedMinutes, newMinutes, 450, v => {
+      els.generatorMinutes.textContent = Math.round(v);
+    });
+    pulseStat(els.generatorMinutes);
+    displayedMinutes = newMinutes;
+  }
   renderGeneratorCost();
 
   els.unplacedList.innerHTML = "";
@@ -239,11 +363,18 @@ function positionBar(bar, startOffsetMin, durationMin) {
 function renderGeneratorCost() {
   const rate = Number(els.ratePerHour.value);
   if (!rate || rate <= 0) {
-    els.generatorCost.textContent = "";
+    els.generatorCost.textContent = "—";
+    displayedCost = null;
     return;
   }
   const cost = (lastResult.totalGeneratorMinutes / 60) * rate;
-  els.generatorCost.textContent = `≈ ৳${cost.toFixed(2)} today`;
+  if (displayedCost === null || Math.abs(cost - displayedCost) > 0.004) {
+    animateValue(displayedCost, cost, 400, v => {
+      els.generatorCost.textContent = `৳${v.toFixed(2)}`;
+    });
+    pulseStat(els.generatorCost);
+  }
+  displayedCost = cost;
 }
 
 function attachDragHandlers(bar, openMin, totalMin) {
@@ -274,7 +405,7 @@ function attachDragHandlers(bar, openMin, totalMin) {
       const snappedMin = Math.round(rawMin / SNAP_MIN) * SNAP_MIN;
       const newStart = toHHMM(openMin + snappedMin);
 
-      moveJob(jobName, newStart);
+      moveJob(jobName, newStart, bar);
     }
 
     document.addEventListener("mousemove", onMouseMove);

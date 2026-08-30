@@ -39,4 +39,42 @@ class SlotizerTest {
         boolean[] mask = Slotizer.cutMask(LocalTime.of(9, 0), LocalTime.of(9, 30), List.of());
         assertThat(mask).containsExactly(false, false);
     }
+
+    @Test
+    void closeEqualToOpenMeansAFull24HourDay() {
+        int slots = Slotizer.totalSlots(LocalTime.of(0, 0), LocalTime.of(0, 0));
+        assertThat(slots).isEqualTo(24 * 60 / 15);
+    }
+
+    @Test
+    void overnightDaySpansPastMidnight() {
+        int slots = Slotizer.totalSlots(LocalTime.of(22, 0), LocalTime.of(6, 0));
+        assertThat(slots).isEqualTo(8 * 60 / 15);
+    }
+
+    @Test
+    void cutRunningToExactlyMidnightOnAFull24HourDayIsNotDropped() {
+        boolean[] mask = Slotizer.cutMask(
+                LocalTime.of(0, 0), LocalTime.of(0, 0),
+                List.of(new Cut(LocalTime.of(23, 30), LocalTime.of(0, 0))));
+
+        // Last two 15-min slots of the day (23:30-23:45, 23:45-00:00) are cut.
+        assertThat(mask[mask.length - 1]).isTrue();
+        assertThat(mask[mask.length - 2]).isTrue();
+        assertThat(mask[mask.length - 3]).isFalse();
+    }
+
+    @Test
+    void cutBeforeOpenOnAnOrdinaryDayIsStillClampedNotWrapped() {
+        // A stray early-morning cut on a normal 09:00-21:00 day shouldn't
+        // wrap around and swallow the whole day - it should simply have no
+        // effect since it falls entirely outside shop hours.
+        boolean[] mask = Slotizer.cutMask(
+                LocalTime.of(9, 0), LocalTime.of(21, 0),
+                List.of(new Cut(LocalTime.of(2, 0), LocalTime.of(3, 0))));
+
+        for (boolean cut : mask) {
+            assertThat(cut).isFalse();
+        }
+    }
 }
