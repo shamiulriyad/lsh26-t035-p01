@@ -1,0 +1,236 @@
+:root {
+  --grid-color: #2f6fed;
+  --generator-color: #35a35a;
+  --generator-cost-color: #e0762b;
+  --none-color: #8a8a8a;
+  --cut-color: #f4c7c7;
+  --border: #d8d8d8;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  margin: 0;
+  padding: 0 1.5rem 3rem;
+  background: #fafafa;
+  color: #1c1c1c;
+}
+
+header {
+  padding: 1.5rem 0 0.5rem;
+}
+
+h1 { margin: 0; }
+.subtitle { color: #666; margin: 0.2rem 0 0; }
+
+.panel {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  margin-top: 1rem;
+}
+
+.panel h2 { margin-top: 0; font-size: 1.05rem; }
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 1rem;
+}
+
+.row label {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.85rem;
+  color: #444;
+  gap: 0.25rem;
+}
+
+input, select, button {
+  font: inherit;
+  padding: 0.4rem 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+
+button {
+  background: #1c1c1c;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  height: 2.1rem;
+}
+button:hover { opacity: 0.85; }
+
+.chip-list {
+  list-style: none;
+  padding: 0;
+  margin: 0.75rem 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.chip-list li {
+  background: #f0f0f0;
+  border-radius: 999px;
+  padding: 0.3rem 0.7rem;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.chip-list button {
+  background: none;
+  color: #999;
+  border: none;
+  height: auto;
+  padding: 0 0.2rem;
+  font-weight: bold;
+}
+
+.chip-list.unplaced li {
+  background: #fdeceb;
+  color: #8a2a20;
+}
+
+.summary {
+  margin-bottom: 0.4rem;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.rate-input {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.85rem;
+  color: #444;
+}
+
+.rate-input input {
+  width: 5.5rem;
+  padding: 0.25rem 0.4rem;
+}
+
+.taka-prefix { color: #666; }
+
+.cost-display {
+  font-weight: 600;
+  color: #1c1c1c;
+}
+
+.hint {
+  margin: 0 0 0.75rem;
+  font-size: 0.8rem;
+  color: #888;
+}
+
+.timeline {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding-bottom: 0.5rem;
+}
+
+.time-axis, .track {
+  position: relative;
+  height: 26px;
+  min-width: 100%;
+}
+
+.time-axis {
+  border-bottom: 1px solid var(--border);
+  font-size: 0.7rem;
+  color: #888;
+}
+
+.track {
+  border-bottom: 1px dashed #eee;
+}
+
+.tick {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  border-left: 1px solid #eee;
+  padding-left: 3px;
+}
+
+.bar {
+  position: absolute;
+  top: 3px;
+  bottom: 3px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  color: #fff;
+  overflow: hidden;
+  white-space: nowrap;
+  padding: 2px 4px;
+}
+
+.bar.cut { background: var(--cut-color); color: #8a2a20; }
+.bar.grid { background: var(--grid-color); }
+.bar.generator { background: var(--generator-color); }
+.bar.generator.cost { background: var(--generator-cost-color); }
+.bar.none { background: var(--none-color); }
+
+.plan-row .bar {
+  cursor: grab;
+  user-select: none;
+  transition: box-shadow 0.1s ease;
+}
+
+.plan-row .bar:hover { box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.15) inset; }
+
+.plan-row .bar.dragging {
+  cursor: grabbing;
+  opacity: 0.85;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  z-index: 5;
+}
+
+.toast {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #2a1c1c;
+  color: #fff;
+  padding: 0.6rem 1rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  max-width: min(90vw, 32rem);
+}
+
+.toast[hidden] { display: none; }
+
+.legend {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.75rem;
+  font-size: 0.8rem;
+  flex-wrap: wrap;
+}
+
+.legend-item { display: flex; align-items: center; gap: 0.35rem; }
+
+.swatch {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  display: inline-block;
+}
+
+.swatch.grid { background: var(--grid-color); }
+.swatch.generator { background: var(--generator-color); }
+.swatch.generator.cost { background: var(--generator-cost-color); }
+.swatch.none { background: var(--none-color); }

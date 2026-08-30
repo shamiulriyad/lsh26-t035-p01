@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>LoadShed Planner</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>LoadShed Planner</h1>
+    <p class="subtitle">Mirpur print shop &mdash; plan today's jobs around the power cuts</p>
+  </header>
+
+  <main>
+    <section class="panel">
+      <h2>Shop hours</h2>
+      <div class="row">
+        <label>Open <input type="time" id="shopOpen" value="09:00" step="900"></label>
+        <label>Close <input type="time" id="shopClose" value="21:00" step="900"></label>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Power cuts</h2>
+      <div class="row">
+        <label>Start <input type="time" id="cutStart" step="900"></label>
+        <label>End <input type="time" id="cutEnd" step="900"></label>
+        <button id="addCut">Add cut</button>
+      </div>
+      <ul id="cutList" class="chip-list"></ul>
+    </section>
+
+    <section class="panel">
+      <h2>Jobs</h2>
+      <div class="row">
+        <label>Name <input type="text" id="jobName" placeholder="A0 banner print"></label>
+        <label>Minutes <input type="number" id="jobMinutes" min="15" step="15" value="30"></label>
+        <label>Power
+          <select id="jobPower">
+            <option value="grid">Needs grid</option>
+            <option value="generator">Can use generator</option>
+            <option value="none">No power</option>
+          </select>
+        </label>
+        <button id="addJob">Add job</button>
+      </div>
+      <ul id="jobList" class="chip-list"></ul>
+    </section>
+
+    <section class="panel">
+      <h2>Plan</h2>
+      <div class="summary">
+        <span>Generator minutes today: <strong id="generatorMinutes">0</strong></span>
+        <label class="rate-input">Generator cost
+          <span class="taka-prefix">৳</span><input type="number" id="ratePerHour" min="0" step="1" placeholder="per hour">
+        </label>
+        <span id="generatorCost" class="cost-display"></span>
+      </div>
+      <p class="hint">Drag a placed job left or right to reschedule it &mdash; the generator total updates immediately.</p>
+      <div id="timeline" class="timeline">
+        <div id="timeAxis" class="time-axis"></div>
+        <div id="cutsRow" class="track cuts-row"></div>
+        <div id="planRow" class="track plan-row"></div>
+      </div>
+      <div class="legend">
+        <span class="legend-item"><span class="swatch grid"></span>Grid</span>
+        <span class="legend-item"><span class="swatch generator"></span>Generator (free)</span>
+        <span class="legend-item"><span class="swatch generator cost"></span>Generator (running, costs money)</span>
+        <span class="legend-item"><span class="swatch none"></span>No power</span>
+      </div>
+      <h3>Could not fit</h3>
+      <ul id="unplacedList" class="chip-list unplaced"></ul>
+    </section>
+  </main>
+
+  <div id="toast" class="toast" hidden></div>
+
+  <script src="app.js"></script>
+</body>
+</html>

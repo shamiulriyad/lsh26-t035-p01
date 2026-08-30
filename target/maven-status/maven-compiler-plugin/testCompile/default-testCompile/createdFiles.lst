@@ -1,0 +1,6 @@
+com/mirpurprint/loadshed/scheduler/FixtureFile.class
+com/mirpurprint/loadshed/web/ScheduleControllerTest.class
+com/mirpurprint/loadshed/scheduler/FixtureCasesTest.class
+com/mirpurprint/loadshed/scheduler/SchedulerServiceTest.class
+com/mirpurprint/loadshed/scheduler/SlotizerTest.class
+com/mirpurprint/loadshed/scheduler/SchedulerServiceMoveTest.class
