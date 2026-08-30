@@ -1,0 +1,575 @@
+{
+  "schema_version": "2.1",
+  "problem_id": "P01",
+  "format_note": "## Case format\n```json\n{ \"case_id\": \"PUB-01\",\n  \"shop_open\": \"09:00\", \"shop_close\": \"21:00\",\n  \"cuts\": [ {\"start\": \"10:30\", \"end\": \"11:15\"}, {\"start\": \"14:00\", \"end\": \"15:30\"} ],\n  \"jobs\": [ {\"name\": \"A0 banner print\", \"minutes\": 90, \"power\": \"grid\"},\n            {\"name\": \"Passport photos\", \"minutes\": 45, \"power\": \"generator\"},\n            {\"name\": \"Spiral binding\", \"minutes\": 30, \"power\": \"none\"} ] }\n```\nTimes are 24 hour `HH:MM`. `power` is one of `grid`, `generator`, `none`. All times in generated cases\nare multiples of 15 minutes.",
+  "cases": [
+    {
+      "case_id": "PUB-01",
+      "shop_open": "09:00",
+      "shop_close": "20:00",
+      "cuts": [
+        { "start": "11:00", "end": "13:00" },
+        { "start": "13:45", "end": "15:45" }
+      ],
+      "jobs": [
+        { "name": "Scanning bundle", "minutes": 30, "power": "generator" },
+        { "name": "A0 banner print 2", "minutes": 30, "power": "grid" },
+        { "name": "Large format poster", "minutes": 270, "power": "grid" },
+        { "name": "ID card print", "minutes": 60, "power": "generator" },
+        { "name": "Photocopy 500 pages", "minutes": 45, "power": "grid" },
+        { "name": "Laser print 100 pages 2", "minutes": 60, "power": "generator" },
+        { "name": "A0 banner print", "minutes": 90, "power": "grid" },
+        { "name": "Invoice print", "minutes": 30, "power": "generator" },
+        { "name": "Photocopy 50 pages", "minutes": 30, "power": "generator" },
+        { "name": "Laser print 100 pages", "minutes": 150, "power": "generator" },
+        { "name": "Photocopy 50 pages 2", "minutes": 60, "power": "generator" }
+      ]
+    },
+    {
+      "case_id": "PUB-02",
+      "shop_open": "09:00",
+      "shop_close": "21:00",
+      "cuts": [
+        { "start": "10:30", "end": "11:30" },
+        { "start": "12:00", "end": "13:00" },
+        { "start": "14:30", "end": "16:00" },
+        { "start": "18:00", "end": "19:15" }
+      ],
+      "jobs": [
+        { "name": "Lamination trimming", "minutes": 45, "power": "none" },
+        { "name": "Collecting orders", "minutes": 30, "power": "none" },
+        { "name": "Lamination trimming 2", "minutes": 60, "power": "none" },
+        { "name": "A0 banner print", "minutes": 165, "power": "grid" },
+        { "name": "Scanning bundle", "minutes": 30, "power": "generator" },
+        { "name": "Paper cutting 2", "minutes": 135, "power": "none" },
+        { "name": "ID card print", "minutes": 120, "power": "generator" },
+        { "name": "Photocopy 50 pages", "minutes": 60, "power": "generator" },
+        { "name": "Paper cutting", "minutes": 105, "power": "none" },
+        { "name": "Large format poster", "minutes": 75, "power": "grid" }
+      ]
+    },
+    {
+      "case_id": "PUB-03",
+      "shop_open": "09:00",
+      "shop_close": "21:00",
+      "cuts": [
+        { "start": "10:15", "end": "12:15" },
+        { "start": "13:45", "end": "14:15" }
+      ],
+      "jobs": [
+        { "name": "Colour brochure print", "minutes": 30, "power": "grid" },
+        { "name": "Large format poster", "minutes": 60, "power": "grid" },
+        { "name": "A0 banner print", "minutes": 420, "power": "grid" },
+        { "name": "Stapling batch 2", "minutes": 75, "power": "none" },
+        { "name": "Lamination trimming", "minutes": 30, "power": "none" },
+        { "name": "Spiral binding", "minutes": 90, "power": "none" },
+        { "name": "Packing parcels", "minutes": 735, "power": "none" },
+        { "name": "Laser print 100 pages", "minutes": 150, "power": "generator" },
+        { "name": "Laser print 100 pages 2", "minutes": 60, "power": "generator" },
+        { "name": "Large format poster 2", "minutes": 45, "power": "grid" },
+        { "name": "Stapling batch", "minutes": 30, "power": "none" },
+        { "name": "Vinyl sticker print", "minutes": 30, "power": "grid" }
+      ]
+    },
+    {
+      "case_id": "PUB-04",
+      "shop_open": "09:00",
+      "shop_close": "21:00",
+      "cuts": [
+        { "start": "09:45", "end": "11:00" },
+        { "start": "13:00", "end": "15:00" },
+        { "start": "16:45", "end": "18:45" }
+      ],
+      "jobs": [
+        { "name": "ID card print 2", "minutes": 60, "power": "generator" },
+        { "name": "ID card print 3", "minutes": 90, "power": "generator" },
+        { "name": "Scanning bundle", "minutes": 30, "power": "generator" },
+        { "name": "ID card print", "minutes": 105, "power": "generator" },
+        { "name": "ID card print 4", "minutes": 120, "power": "generator" },
+        { "name": "Laser print 100 pages", "minutes": 30, "power": "generator" },
+        { "name": "Stapling batch", "minutes": 60, "power": "none" },
+        { "name": "Invoice print", "minutes": 60, "power": "generator" },
+        { "name": "Large format poster", "minutes": 45, "power": "grid" },
+        { "name": "Spiral binding", "minutes": 60, "power": "none" }
+      ]
+    },
+    {
+      "case_id": "PUB-05",
+      "shop_open": "09:00",
+      "shop_close": "20:00",
+      "cuts": [
+        { "start": "10:30", "end": "12:30" },
+        { "start": "13:00", "end": "13:30" },
+        { "start": "15:15", "end": "16:30" },
+        { "start": "17:00", "end": "18:15" }
+      ],
+      "jobs": [
+        { "name": "Scanning bundle 2", "minutes": 90, "power": "generator" },
+        { "name": "Invoice print", "minutes": 75, "power": "generator" },
+        { "name": "Stapling batch", "minutes": 45, "power": "none" },
+        { "name": "Scanning bundle 3", "minutes": 120, "power": "generator" },
+        { "name": "Scanning bundle", "minutes": 120, "power": "generator" },
+        { "name": "ID card print", "minutes": 90, "power": "generator" },
+        { "name": "Spiral binding", "minutes": 60, "power": "none" },
+        { "name": "A0 banner print", "minutes": 30, "power": "grid" }
+      ]
+    },
+    {
+      "case_id": "PUB-06",
+      "shop_open": "08:00",
+      "shop_close": "20:00",
+      "cuts": [
+        { "start": "10:30", "end": "11:45" },
+        { "start": "12:45", "end": "14:15" },
+        { "start": "15:30", "end": "16:15" },
+        { "start": "17:30", "end": "19:30" }
+      ],
+      "jobs": [
+        { "name": "Collecting orders", "minutes": 45, "power": "none" },
+        { "name": "Wedding card print", "minutes": 45, "power": "grid" },
+        { "name": "ID card print 2", "minutes": 60, "power": "generator" },
+        { "name": "Photocopy 500 pages 2", "minutes": 45, "power": "grid" },
+        { "name": "Invoice print", "minutes": 75, "power": "generator" },
+        { "name": "Spiral binding", "minutes": 45, "power": "none" },
+        { "name": "Photocopy 500 pages", "minutes": 45, "power": "grid" },
+        { "name": "Packing parcels", "minutes": 75, "power": "none" },
+        { "name": "Laser print 100 pages", "minutes": 45, "power": "generator" },
+        { "name": "Colour brochure print", "minutes": 60, "power": "grid" },
+        { "name": "ID card print", "minutes": 75, "power": "generator" }
+      ]
+    },
+    {
+      "case_id": "PUB-07",
+      "shop_open": "09:00",
+      "shop_close": "20:00",
+      "cuts": [
+        { "start": "10:45", "end": "12:15" },
+        { "start": "13:30", "end": "15:15" },
+        { "start": "16:15", "end": "17:30" }
+      ],
+      "jobs": [
+        { "name": "Lamination trimming", "minutes": 105, "power": "none" },
+        { "name": "Paper cutting 2", "minutes": 675, "power": "none" },
+        { "name": "Laser print 100 pages", "minutes": 30, "power": "generator" },
+        { "name": "Invoice print", "minutes": 105, "power": "generator" },
+        { "name": "Paper cutting", "minutes": 60, "power": "none" },
+        { "name": "Wedding card print", "minutes": 180, "power": "grid" },
+        { "name": "Packing parcels", "minutes": 90, "power": "none" },
+        { "name": "Passport photos", "minutes": 90, "power": "generator" },
+        { "name": "ID card print 2", "minutes": 60, "power": "generator" },
+        { "name": "Colour brochure print", "minutes": 45, "power": "grid" },
+        { "name": "Scanning bundle", "minutes": 30, "power": "generator" },
+        { "name": "ID card print", "minutes": 45, "power": "generator" }
+      ]
+    },
+    {
+      "case_id": "PUB-08",
+      "shop_open": "09:00",
+      "shop_close": "20:00",
+      "cuts": [
+        { "start": "09:30", "end": "10:30" },
+        { "start": "11:30", "end": "12:45" },
+        { "start": "13:30", "end": "15:00" },
+        { "start": "17:00", "end": "18:00" }
+      ],
+      "jobs": [
+        { "name": "Laser print 100 pages 2", "minutes": 90, "power": "generator" },
+        { "name": "Passport photos", "minutes": 60, "power": "generator" },
+        { "name": "Spiral binding", "minutes": 30, "power": "none" },
+        { "name": "Passport photos 3", "minutes": 705, "power": "generator" },
+        { "name": "Laser print 100 pages", "minutes": 105, "power": "generator" },
+        { "name": "A0 banner print", "minutes": 45, "power": "grid" },
+        { "name": "Passport photos 2", "minutes": 105, "power": "generator" },
+        { "name": "Photocopy 500 pages", "minutes": 165, "power": "grid" },
+        { "name": "Vinyl sticker print", "minutes": 60, "power": "grid" },
+        { "name": "Scanning bundle", "minutes": 90, "power": "generator" }
+      ]
+    },
+    {
+      "case_id": "PUB-09",
+      "shop_open": "08:00",
+      "shop_close": "20:00",
+      "cuts": [
+        { "start": "08:45", "end": "10:30" },
+        { "start": "11:15", "end": "12:15" },
+        { "start": "13:30", "end": "14:45" }
+      ],
+      "jobs": [
+        { "name": "Spiral binding", "minutes": 60, "power": "none" },
+        { "name": "Passport photos", "minutes": 75, "power": "generator" },
+        { "name": "Passport photos 2", "minutes": 105, "power": "generator" },
+        { "name": "Lamination trimming", "minutes": 45, "power": "none" },
+        { "name": "Laser print 100 pages", "minutes": 90, "power": "generator" },
+        { "name": "Colour brochure print", "minutes": 30, "power": "grid" },
+        { "name": "Vinyl sticker print", "minutes": 105, "power": "grid" },
+        { "name": "ID card print", "minutes": 45, "power": "generator" },
+        { "name": "Photocopy 50 pages", "minutes": 75, "power": "generator" },
+        { "name": "Photocopy 50 pages 2", "minutes": 60, "power": "generator" }
+      ]
+    },
+    {
+      "case_id": "PUB-10",
+      "shop_open": "09:00",
+      "shop_close": "20:00",
+      "cuts": [
+        { "start": "11:15", "end": "11:45" },
+        { "start": "13:15", "end": "13:45" },
+        { "start": "15:30", "end": "17:00" },
+        { "start": "18:00", "end": "19:45" }
+      ],
+      "jobs": [
+        { "name": "Vinyl sticker print", "minutes": 30, "power": "grid" },
+        { "name": "Invoice print", "minutes": 60, "power": "generator" },
+        { "name": "Large format poster 2", "minutes": 150, "power": "grid" },
+        { "name": "Photocopy 50 pages 2", "minutes": 30, "power": "generator" },
+        { "name": "Passport photos", "minutes": 150, "power": "generator" },
+        { "name": "Large format poster", "minutes": 45, "power": "grid" },
+        { "name": "Photocopy 50 pages", "minutes": 45, "power": "generator" },
+        { "name": "Collecting orders", "minutes": 90, "power": "none" },
+        { "name": "Invoice print 2", "minutes": 90, "power": "generator" },
+        { "name": "Photocopy 50 pages 3", "minutes": 30, "power": "generator" },
+        { "name": "Lamination trimming", "minutes": 690, "power": "none" }
+      ]
+    },
+    {
+      "case_id": "PUB-11",
+      "shop_open": "10:00",
+      "shop_close": "22:00",
+      "cuts": [
+        { "start": "11:30", "end": "12:45" },
+        { "start": "14:45", "end": "15:45" },
+        { "start": "16:15", "end": "17:15" },
+        { "start": "18:00", "end": "20:00" }
+      ],
+      "jobs": [
+        { "name": "Colour brochure print 2", "minutes": 60, "power": "grid" },
+        { "name": "Invoice print", "minutes": 90, "power": "generator" },
+        { "name": "Packing parcels", "minutes": 30, "power": "none" },
+        { "name": "Packing parcels 2", "minutes": 90, "power": "none" },
+        { "name": "Laser print 100 pages", "minutes": 60, "power": "generator" },
+        { "name": "Invoice print 3", "minutes": 30, "power": "generator" },
+        { "name": "Collecting orders", "minutes": 60, "power": "none" },
+        { "name": "Photocopy 50 pages", "minutes": 60, "power": "generator" },
+        { "name": "Colour brochure print", "minutes": 45, "power": "grid" },
+        { "name": "Invoice print 2", "minutes": 90, "power": "generator" },
+        { "name": "Passport photos", "minutes": 75, "power": "generator" }
+      ]
+    },
+    {
+      "case_id": "PUB-12",
+      "shop_open": "08:00",
+      "shop_close": "20:00",
+      "cuts": [
+        { "start": "10:45", "end": "12:15" },
+        { "start": "12:45", "end": "14:15" },
+        { "start": "15:00", "end": "15:45" }
+      ],
+      "jobs": [
+        { "name": "Collecting orders 2", "minutes": 765, "power": "none" },
+        { "name": "Scanning bundle", "minutes": 30, "power": "generator" },
+        { "name": "Stapling batch", "minutes": 90, "power": "none" },
+        { "name": "Passport photos", "minutes": 75, "power": "generator" },
+        { "name": "Photocopy 500 pages", "minutes": 30, "power": "grid" },
+        { "name": "Scanning bundle 2", "minutes": 30, "power": "generator" },
+        { "name": "Large format poster", "minutes": 45, "power": "grid" },
+        { "name": "Wedding card print", "minutes": 75, "power": "grid" },
+        { "name": "Packing parcels", "minutes": 135, "power": "none" },
+        { "name": "Photocopy 50 pages", "minutes": 120, "power": "generator" },
+        { "name": "Collecting orders", "minutes": 750, "power": "none" }
+      ]
+    },
+    {
+      "case_id": "PUB-13",
+      "shop_open": "08:00",
+      "shop_close": "20:00",
+      "cuts": [
+        { "start": "09:15", "end": "10:30" },
+        { "start": "11:00", "end": "11:45" },
+        { "start": "13:00", "end": "13:45" },
+        { "start": "15:15", "end": "16:15" }
+      ],
+      "jobs": [
+        { "name": "Packing parcels", "minutes": 30, "power": "none" },
+        { "name": "ID card print", "minutes": 30, "power": "generator" },
+        { "name": "Photocopy 50 pages 4", "minutes": 30, "power": "generator" },
+        { "name": "Colour brochure print", "minutes": 105, "power": "grid" },
+        { "name": "Paper cutting", "minutes": 90, "power": "none" },
+        { "name": "Photocopy 50 pages", "minutes": 90, "power": "generator" },
+        { "name": "Invoice print", "minutes": 75, "power": "generator" },
+        { "name": "Photocopy 50 pages 3", "minutes": 150, "power": "generator" },
+        { "name": "Photocopy 50 pages 2", "minutes": 90, "power": "generator" }
+      ]
+    },
+    {
+      "case_id": "PUB-14",
+      "shop_open": "10:00",
+      "shop_close": "22:00",
+      "cuts": [
+        { "start": "11:15", "end": "13:15" },
+        { "start": "14:45", "end": "16:00" },
+        { "start": "17:45", "end": "19:30" }
+      ],
+      "jobs": [
+        { "name": "Photocopy 500 pages", "minutes": 45, "power": "grid" },
+        { "name": "ID card print 2", "minutes": 60, "power": "generator" },
+        { "name": "Photocopy 50 pages", "minutes": 120, "power": "generator" },
+        { "name": "Laser print 100 pages", "minutes": 105, "power": "generator" },
+        { "name": "A0 banner print", "minutes": 195, "power": "grid" },
+        { "name": "Invoice print 2", "minutes": 60, "power": "generator" },
+        { "name": "Spiral binding", "minutes": 135, "power": "none" },
+        { "name": "Invoice print", "minutes": 60, "power": "generator" },
+        { "name": "Photocopy 500 pages 2", "minutes": 180, "power": "grid" },
+        { "name": "ID card print", "minutes": 120, "power": "generator" }
+      ]
+    },
+    {
+      "case_id": "PUB-15",
+      "shop_open": "08:00",
+      "shop_close": "20:00",
+      "cuts": [
+        { "start": "09:15", "end": "11:15" },
+        { "start": "12:30", "end": "13:00" }
+      ],
+      "jobs": [
+        { "name": "Laser print 100 pages 2", "minutes": 90, "power": "generator" },
+        { "name": "Lamination trimming", "minutes": 30, "power": "none" },
+        { "name": "Vinyl sticker print", "minutes": 105, "power": "grid" },
+        { "name": "Large format poster", "minutes": 30, "power": "grid" },
+        { "name": "Photocopy 500 pages", "minutes": 75, "power": "grid" },
+        { "name": "Scanning bundle", "minutes": 45, "power": "generator" },
+        { "name": "ID card print", "minutes": 135, "power": "generator" },
+        { "name": "Paper cutting", "minutes": 90, "power": "none" },
+        { "name": "A0 banner print", "minutes": 465, "power": "grid" },
+        { "name": "Invoice print", "minutes": 30, "power": "generator" },
+        { "name": "Laser print 100 pages", "minutes": 30, "power": "generator" },
+        { "name": "Large format poster 2", "minutes": 30, "power": "grid" }
+      ]
+    },
+    {
+      "case_id": "PUB-16",
+      "shop_open": "10:00",
+      "shop_close": "22:00",
+      "cuts": [
+        { "start": "12:15", "end": "13:45" },
+        { "start": "15:45", "end": "17:30" },
+        { "start": "18:15", "end": "18:45" }
+      ],
+      "jobs": [
+        { "name": "Spiral binding 2", "minutes": 45, "power": "none" },
+        { "name": "ID card print", "minutes": 135, "power": "generator" },
+        { "name": "Paper cutting", "minutes": 45, "power": "none" },
+        { "name": "Photocopy 500 pages", "minutes": 30, "power": "grid" },
+        { "name": "Stapling batch", "minutes": 60, "power": "none" },
+        { "name": "Laser print 100 pages", "minutes": 90, "power": "generator" },
+        { "name": "Spiral binding", "minutes": 105, "power": "none" },
+        { "name": "Scanning bundle", "minutes": 75, "power": "generator" },
+        { "name": "Large format poster", "minutes": 45, "power": "grid" },
+        { "name": "Passport photos", "minutes": 45, "power": "generator" }
+      ]
+    },
+    {
+      "case_id": "PUB-17",
+      "shop_open": "09:00",
+      "shop_close": "20:00",
+      "cuts": [
+        { "start": "11:00", "end": "13:00" },
+        { "start": "14:15", "end": "16:00" },
+        { "start": "16:45", "end": "17:15" },
+        { "start": "18:45", "end": "19:45" }
+      ],
+      "jobs": [
+        { "name": "Laser print 100 pages 2", "minutes": 30, "power": "generator" },
+        { "name": "Colour brochure print", "minutes": 30, "power": "grid" },
+        { "name": "Laser print 100 pages", "minutes": 75, "power": "generator" },
+        { "name": "Photocopy 50 pages", "minutes": 45, "power": "generator" },
+        { "name": "Collecting orders", "minutes": 120, "power": "none" },
+        { "name": "Passport photos", "minutes": 30, "power": "generator" },
+        { "name": "Invoice print", "minutes": 60, "power": "generator" },
+        { "name": "Photocopy 50 pages 3", "minutes": 105, "power": "generator" },
+        { "name": "Photocopy 50 pages 2", "minutes": 30, "power": "generator" },
+        { "name": "Scanning bundle", "minutes": 120, "power": "generator" }
+      ]
+    },
+    {
+      "case_id": "PUB-18",
+      "shop_open": "10:00",
+      "shop_close": "22:00",
+      "cuts": [
+        { "start": "11:30", "end": "12:15" },
+        { "start": "13:00", "end": "13:45" },
+        { "start": "15:15", "end": "17:00" },
+        { "start": "18:45", "end": "19:15" }
+      ],
+      "jobs": [
+        { "name": "Laser print 100 pages 2", "minutes": 30, "power": "generator" },
+        { "name": "ID card print 2", "minutes": 30, "power": "generator" },
+        { "name": "Laser print 100 pages", "minutes": 105, "power": "generator" },
+        { "name": "Photocopy 50 pages", "minutes": 75, "power": "generator" },
+        { "name": "A0 banner print 2", "minutes": 210, "power": "grid" },
+        { "name": "Invoice print", "minutes": 105, "power": "generator" },
+        { "name": "Spiral binding", "minutes": 75, "power": "none" },
+        { "name": "A0 banner print", "minutes": 105, "power": "grid" },
+        { "name": "ID card print", "minutes": 150, "power": "generator" }
+      ]
+    },
+    {
+      "case_id": "PUB-19",
+      "shop_open": "10:00",
+      "shop_close": "22:00",
+      "cuts": [
+        { "start": "12:30", "end": "14:15" },
+        { "start": "15:30", "end": "16:15" },
+        { "start": "17:45", "end": "18:15" },
+        { "start": "19:45", "end": "21:00" }
+      ],
+      "jobs": [
+        { "name": "Scanning bundle", "minutes": 45, "power": "generator" },
+        { "name": "Photocopy 500 pages 2", "minutes": 60, "power": "grid" },
+        { "name": "Colour brochure print 2", "minutes": 30, "power": "grid" },
+        { "name": "Colour brochure print", "minutes": 45, "power": "grid" },
+        { "name": "Laser print 100 pages", "minutes": 90, "power": "generator" },
+        { "name": "Photocopy 500 pages 3", "minutes": 45, "power": "grid" },
+        { "name": "Lamination trimming", "minutes": 75, "power": "none" },
+        { "name": "Stapling batch", "minutes": 30, "power": "none" },
+        { "name": "Scanning bundle 2", "minutes": 45, "power": "generator" },
+        { "name": "Photocopy 500 pages", "minutes": 90, "power": "grid" },
+        { "name": "Vinyl sticker print 2", "minutes": 165, "power": "grid" },
+        { "name": "Vinyl sticker print", "minutes": 30, "power": "grid" },
+        { "name": "Large format poster", "minutes": 165, "power": "grid" }
+      ]
+    },
+    {
+      "case_id": "PUB-20",
+      "shop_open": "09:00",
+      "shop_close": "21:00",
+      "cuts": [
+        { "start": "11:30", "end": "13:00" },
+        { "start": "13:30", "end": "14:00" },
+        { "start": "14:45", "end": "16:15" },
+        { "start": "16:45", "end": "18:45" }
+      ],
+      "jobs": [
+        { "name": "ID card print", "minutes": 90, "power": "generator" },
+        { "name": "Passport photos", "minutes": 45, "power": "generator" },
+        { "name": "Photocopy 50 pages 2", "minutes": 735, "power": "generator" },
+        { "name": "Photocopy 500 pages", "minutes": 90, "power": "grid" },
+        { "name": "Spiral binding", "minutes": 75, "power": "none" },
+        { "name": "Spiral binding 2", "minutes": 735, "power": "none" },
+        { "name": "Paper cutting", "minutes": 150, "power": "none" },
+        { "name": "Scanning bundle", "minutes": 45, "power": "generator" },
+        { "name": "Photocopy 50 pages", "minutes": 60, "power": "generator" },
+        { "name": "Lamination trimming", "minutes": 150, "power": "none" }
+      ]
+    },
+    {
+      "case_id": "PUB-21",
+      "shop_open": "09:00",
+      "shop_close": "20:00",
+      "cuts": [
+        { "start": "10:15", "end": "11:15" },
+        { "start": "12:15", "end": "13:45" }
+      ],
+      "jobs": [
+        { "name": "Scanning bundle 2", "minutes": 30, "power": "generator" },
+        { "name": "ID card print", "minutes": 30, "power": "generator" },
+        { "name": "Scanning bundle", "minutes": 45, "power": "generator" },
+        { "name": "Vinyl sticker print", "minutes": 105, "power": "grid" },
+        { "name": "Photocopy 50 pages", "minutes": 75, "power": "generator" },
+        { "name": "Photocopy 50 pages 2", "minutes": 120, "power": "generator" },
+        { "name": "Passport photos", "minutes": 30, "power": "generator" },
+        { "name": "Stapling batch", "minutes": 45, "power": "none" },
+        { "name": "Passport photos 2", "minutes": 135, "power": "generator" },
+        { "name": "Spiral binding", "minutes": 30, "power": "none" }
+      ]
+    },
+    {
+      "case_id": "PUB-22",
+      "shop_open": "09:00",
+      "shop_close": "21:00",
+      "cuts": [
+        { "start": "10:00", "end": "10:30" },
+        { "start": "11:00", "end": "12:00" }
+      ],
+      "jobs": [
+        { "name": "ID card print", "minutes": 30, "power": "generator" },
+        { "name": "Wedding card print 2", "minutes": 30, "power": "grid" },
+        { "name": "Laser print 100 pages 2", "minutes": 105, "power": "generator" },
+        { "name": "Photocopy 500 pages 2", "minutes": 570, "power": "grid" },
+        { "name": "Colour brochure print", "minutes": 30, "power": "grid" },
+        { "name": "Colour brochure print 2", "minutes": 555, "power": "grid" },
+        { "name": "Photocopy 500 pages", "minutes": 45, "power": "grid" },
+        { "name": "Lamination trimming", "minutes": 90, "power": "none" },
+        { "name": "Passport photos", "minutes": 90, "power": "generator" },
+        { "name": "Invoice print", "minutes": 30, "power": "generator" },
+        { "name": "Invoice print 2", "minutes": 45, "power": "generator" },
+        { "name": "Wedding card print", "minutes": 30, "power": "grid" },
+        { "name": "Laser print 100 pages", "minutes": 75, "power": "generator" }
+      ]
+    },
+    {
+      "case_id": "PUB-23",
+      "shop_open": "10:00",
+      "shop_close": "22:00",
+      "cuts": [
+        { "start": "11:30", "end": "12:30" },
+        { "start": "13:45", "end": "14:45" }
+      ],
+      "jobs": [
+        { "name": "ID card print 2", "minutes": 45, "power": "generator" },
+        { "name": "Vinyl sticker print 3", "minutes": 465, "power": "grid" },
+        { "name": "Collecting orders", "minutes": 75, "power": "none" },
+        { "name": "ID card print", "minutes": 45, "power": "generator" },
+        { "name": "Photocopy 50 pages", "minutes": 30, "power": "generator" },
+        { "name": "ID card print 3", "minutes": 30, "power": "generator" },
+        { "name": "Vinyl sticker print 2", "minutes": 30, "power": "grid" },
+        { "name": "Passport photos", "minutes": 60, "power": "generator" },
+        { "name": "Stapling batch", "minutes": 75, "power": "none" },
+        { "name": "Invoice print", "minutes": 105, "power": "generator" },
+        { "name": "Photocopy 500 pages", "minutes": 60, "power": "grid" },
+        { "name": "Vinyl sticker print", "minutes": 45, "power": "grid" }
+      ]
+    },
+    {
+      "case_id": "PUB-24",
+      "shop_open": "09:00",
+      "shop_close": "20:00",
+      "cuts": [
+        { "start": "09:45", "end": "10:45" },
+        { "start": "11:45", "end": "13:45" }
+      ],
+      "jobs": [
+        { "name": "Laser print 100 pages 2", "minutes": 135, "power": "generator" },
+        { "name": "Photocopy 50 pages 2", "minutes": 690, "power": "generator" },
+        { "name": "Passport photos", "minutes": 75, "power": "generator" },
+        { "name": "Spiral binding", "minutes": 135, "power": "none" },
+        { "name": "Invoice print 2", "minutes": 45, "power": "generator" },
+        { "name": "Invoice print", "minutes": 105, "power": "generator" },
+        { "name": "Large format poster", "minutes": 90, "power": "grid" },
+        { "name": "Laser print 100 pages", "minutes": 30, "power": "generator" },
+        { "name": "Photocopy 50 pages", "minutes": 30, "power": "generator" }
+      ]
+    },
+    {
+      "case_id": "PUB-25",
+      "shop_open": "08:00",
+      "shop_close": "20:00",
+      "cuts": [
+        { "start": "09:45", "end": "11:30" },
+        { "start": "12:30", "end": "13:15" },
+        { "start": "14:30", "end": "15:45" },
+        { "start": "17:30", "end": "18:30" }
+      ],
+      "jobs": [
+        { "name": "Vinyl sticker print", "minutes": 135, "power": "grid" },
+        { "name": "ID card print", "minutes": 30, "power": "generator" },
+        { "name": "Photocopy 500 pages", "minutes": 90, "power": "grid" },
+        { "name": "Paper cutting", "minutes": 105, "power": "none" },
+        { "name": "Wedding card print", "minutes": 45, "power": "grid" },
+        { "name": "Collecting orders", "minutes": 90, "power": "none" },
+        { "name": "Photocopy 50 pages", "minutes": 105, "power": "generator" },
+        { "name": "Scanning bundle 2", "minutes": 105, "power": "generator" },
+        { "name": "Scanning bundle", "minutes": 60, "power": "generator" }
+      ]
+    }
+  ]
+}
