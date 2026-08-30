@@ -61,11 +61,9 @@ Then open `http://localhost:8080`.
 - **No input validation on cut/job overlap sanity** (e.g. a cut with `end` before `start` on an ordinary, non-wrapping day is simply ignored rather than rejected with an error).
 
 ## Contributions
-
-| Member | Contribution |
-|---|---|
-| https://github.com/shamiulriyad | `[FILL IN]` |
-| `[FILL IN]` | `[FILL IN]` |
-| `[FILL IN]` | `[FILL IN]` |
+* **[Rabbi Islam Emon](https://github.com/iamrabbiislamemon)** -  Core Developer
+* * **[Shamiul Islam Riyad](https://github.com/shamiulriyad)** - QA & Bug Tester
+* **[Sayem Rahman](https://github.com/SayemR0018)** - QA & Bug Tester
+* **[Rumman Karim](https://github.com/rumman999)** - QA & Bug Tester
 
 *(Git history shows commits from Rabbi Islam Emon and shamiulriyad — fill in each registered member's actual major contribution here.)*
