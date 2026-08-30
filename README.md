@@ -4,7 +4,7 @@ A day planner for a Mirpur print shop that schedules jobs around rotating power 
 
 - **Team ID:** `LSH26-T035`
 - **Problem ID:** `P01`
-- **Live URL:** ``
+- **Live URL:** `https://lsh26-t035-p01-tk7z.onrender.com/`
 
 ## Status
 
