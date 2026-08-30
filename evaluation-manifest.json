@@ -1,0 +1,41 @@
+{
+  "_instructions": "This is a placeholder — replace this whole file with the actual evaluation-manifest.json template from the participant pack (available in the arena at 05:30pm), filled in with real values. Every value below marked FILL_IN must be replaced.",
+  "team_id": "FILL_IN",
+  "problem_id": "FILL_IN",
+  "repo_url": "https://github.com/shamiulriyad/lsh26-t035-p01",
+  "live_url": "FILL_IN",
+  "members": [
+    {
+      "name": "FILL_IN",
+      "contribution": "FILL_IN"
+    },
+    {
+      "name": "FILL_IN",
+      "contribution": "FILL_IN"
+    },
+    {
+      "name": "FILL_IN",
+      "contribution": "FILL_IN"
+    }
+  ],
+  "tech_stack": {
+    "backend": "Java 17, Spring Boot 3.3.4",
+    "frontend": "Vanilla HTML/CSS/JavaScript, no build step",
+    "build": "Maven",
+    "ci_cd": "GitHub Actions -> Docker image published to GitHub Container Registry"
+  },
+  "requirements_met": [
+    {
+      "requirement": "FILL_IN — copy each requirement from the problem statement",
+      "status": "FILL_IN — met / partially met / not met",
+      "proof": "FILL_IN — where in the repo/README this is demonstrated"
+    }
+  ],
+  "known_limitations": [
+    "No persistence — the day's plan lives client-side and is lost on refresh.",
+    "No authentication or multi-tenant support.",
+    "Generator-cost is computed at 15-minute slot granularity even though job duration input is free-form.",
+    "Not yet deployed to a public host — only a Docker image is published to GHCR."
+  ],
+  "pre_event_material": "FILL_IN — see EVENT.md"
+}
