@@ -2,7 +2,7 @@
 
 - **Team ID:** `LSH26-T035`
 - **Problem ID:** `P01`
-- **Repository:** `lsh26-t035-p12`
+- **Repository:** `lsh26-t035-p01`
 - **Event start code:** `LSH26-8490-C900`
 - **Repository created before release:** No
 
