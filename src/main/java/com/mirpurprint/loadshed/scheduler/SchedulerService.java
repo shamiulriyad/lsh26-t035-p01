@@ -62,7 +62,7 @@ public class SchedulerService {
         List<UnplacedJob> unplaced = new ArrayList<>();
 
         for (Job job : ordered) {
-            int lenSlots = job.minutes() / Slotizer.SLOT_MINUTES;
+            int lenSlots = Slotizer.lenSlots(job.minutes());
             Optional<Placement> placement = findBestPlacement(occupied, cutMask, lenSlots, job.power());
             if (placement.isPresent()) {
                 Placement p = placement.get();
@@ -111,8 +111,8 @@ public class SchedulerService {
                 .findFirst()
                 .orElseThrow(() -> new InvalidMoveException("\"%s\" isn't on the current plan.".formatted(jobName)));
 
-        int lenSlots = target.job().minutes() / Slotizer.SLOT_MINUTES;
-        int newStartSlot = Slotizer.slotOf(open, newStart);
+        int lenSlots = Slotizer.lenSlots(target.job().minutes());
+        int newStartSlot = Slotizer.slotOf(open, dayCase.shopClose(), newStart);
 
         if (newStartSlot < 0 || newStartSlot + lenSlots > totalSlots) {
             throw new InvalidMoveException("That slot runs outside shop hours.");
@@ -123,8 +123,8 @@ public class SchedulerService {
             if (other.job().name().equals(jobName)) {
                 continue;
             }
-            int otherStart = Slotizer.slotOf(open, other.start());
-            int otherLen = other.job().minutes() / Slotizer.SLOT_MINUTES;
+            int otherStart = Slotizer.slotOf(open, dayCase.shopClose(), other.start());
+            int otherLen = Slotizer.lenSlots(other.job().minutes());
             occupy(occupied, Math.max(0, otherStart), Math.min(otherLen, totalSlots - Math.max(0, otherStart)), true);
         }
 
@@ -260,7 +260,7 @@ public class SchedulerService {
         while (improved && guard++ < 20) {
             improved = false;
             for (Job job : generatorJobs) {
-                int len = job.minutes() / Slotizer.SLOT_MINUTES;
+                int len = Slotizer.lenSlots(job.minutes());
                 int oldStart = starts.get(job);
                 int oldCost = costs.get(job);
 
